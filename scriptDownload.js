@@ -14,23 +14,15 @@ function downloadSheet() {
   var blob = response.getBlob();
   blob.setName(fileName);
   
-  // prompt user to download the file
-  var ui = SpreadsheetApp.getUi();
-  var result = ui.prompt(
-    'Download File',
-    'Enter the download location (e.g., /Downloads) where you want to save the file:',
-    ui.ButtonSet.OK_CANCEL
-  );
-
-  // if user clicks OK, save the file
-  if (result.getSelectedButton() == ui.Button.OK) {
-    var folderPath = result.getResponseText();
-    var folder = DriveApp.getFoldersByName(folderPath);
-    if (folder.hasNext()) {
-      folder.next().createFile(blob);
-      ui.alert('File downloaded successfully!');
-    } else {
-      ui.alert('Folder not found. Please make sure the folder path is correct.');
-    }
+  // hardcoded folder path to save the file
+  var folderPath = "/MyFolder/Subfolder"; // Change this to your desired folder path
+  
+  // save the file to the specified folder
+  var folder = DriveApp.getFoldersByName(folderPath);
+  if (folder.hasNext()) {
+    folder.next().createFile(blob);
+    SpreadsheetApp.getUi().alert('File downloaded successfully!');
+  } else {
+    SpreadsheetApp.getUi().alert('Folder not found. Please make sure the folder path is correct.');
   }
 }
