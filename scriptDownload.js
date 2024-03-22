@@ -7,7 +7,9 @@ def download_sheets_as_excel(sheet_urls, folder_path):
     for index, sheet_url in enumerate(sheet_urls, start=1):
         # Extract Google Sheet ID from URL
         parsed_url = urlparse(sheet_url)
+        print("Parsed URL:", parsed_url)
         query_params = parse_qs(parsed_url.query)
+        print("Query Parameters:", query_params)
         sheet_id = query_params.get('id', [''])[0]
 
         if not sheet_id:
