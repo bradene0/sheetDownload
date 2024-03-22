@@ -1,26 +1,19 @@
-import os
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
+import requests
 
-def download_google_sheet(sheet_url, local_filename):
-    # Define the scope
-    scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-
-    # Load credentials
-    creds = ServiceAccountCredentials.from_json_keyfile_name('credentials.json', scope)
-
-    # Authorize client
-    client = gspread.authorize(creds)
-
-    # Open the Google Sheet
-    sheet = client.open_by_url(sheet_url)
+def download_google_sheet_as_excel(sheet_url, local_filename):
+    # Construct the export URL for Excel format
+    export_url = sheet_url.replace('/edit#gid=', '/export?format=xlsx&gid=')
 
     # Download the sheet as Excel file
-    sheet.export(local_filename, format='xlsx')
-
-    print("Sheet downloaded successfully as Excel!")
+    response = requests.get(export_url)
+    if response.status_code == 200:
+        with open(local_filename, 'wb') as f:
+            f.write(response.content)
+        print("Sheet downloaded successfully as Excel!")
+    else:
+        print("Error:", response.status_code)
 
 # Example usage:
 sheet_url = 'https://docs.google.com/spreadsheets/d/your_sheet_id/edit#gid=0'
 local_filename = 'sheet.xlsx'
-download_google_sheet(sheet_url, local_filename)
+download_google_sheet_as_excel(sheet_url, local_filename)
