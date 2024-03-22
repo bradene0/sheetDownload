@@ -1,28 +1,17 @@
-function downloadSheet() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var fileId = ss.getId();
-  var url = "https://docs.google.com/spreadsheets/d/" + fileId + "/export?format=xlsx"; // change 'xlsx' to 'csv' if you prefer CSV format
+import requests
 
-  var token = ScriptApp.getOAuthToken();
-  var response = UrlFetchApp.fetch(url, {
-    headers: {
-      'Authorization': 'Bearer ' + token
-    }
-  });
+def download_file(url, local_filename):
+    with requests.get(url, stream=True) as r:
+        if r.status_code == 200:
+            with open(local_filename, 'wb') as f:
+                for chunk in r.iter_content(chunk_size=8192):
+                    if chunk:
+                        f.write(chunk)
+            print("File downloaded successfully!")
+        else:
+            print("Error:", r.status_code)
 
-  var fileName = ss.getName() + ".xlsx"; // change extension to '.csv' if using CSV format
-  var blob = response.getBlob();
-  blob.setName(fileName);
-  
-  // hardcoded folder path to save the file
-  var folderPath = "/MyFolder/Subfolder"; // Change this to your desired folder path
-  
-  // save the file to the specified folder
-  var folder = DriveApp.getFoldersByName(folderPath);
-  if (folder.hasNext()) {
-    folder.next().createFile(blob);
-    SpreadsheetApp.getUi().alert('File downloaded successfully!');
-  } else {
-    SpreadsheetApp.getUi().alert('Folder not found. Please make sure the folder path is correct.');
-  }
-}
+# Example usage:
+url = 'https://example.com/file.xlsx'
+local_filename = 'file.xlsx'
+download_file(url, local_filename)
