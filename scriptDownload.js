@@ -1,31 +1,23 @@
-import gspread
+import requests
 from datetime import datetime
 
-def download_all_sheets_from_workbooks(sheet_urls, folder_path):
-    # Iterate over each sheet URL
+def download_sheets_as_excel(sheet_urls, folder_path):
     for sheet_url in sheet_urls:
-        # Open the Google Sheet
-        client = gspread.service_account()
-        workbook = client.open_by_url(sheet_url)
+        # Generate filename with current date
+        current_date = datetime.now().strftime('%Y-%m-%d')
+        local_filename = f"{folder_path}/sheet_{current_date}.xlsx"
 
-        # Iterate over all sheets in the workbook
-        for sheet in workbook.worksheets():
-            # Construct the export URL for Excel format
-            export_url = sheet.url.replace('/edit', '/export?format=xlsx')
+        # Construct the export URL for Excel format
+        export_url = sheet_url.replace('/edit#gid=', '/export?format=xlsx&gid=')
 
-            # Generate filename with current date, workbook title, and sheet name
-            current_date = datetime.now().strftime('%Y-%m-%d')
-            workbook_title = workbook.title.replace(' ', '_')  # Replace spaces with underscores
-            local_filename = f"{folder_path}/{workbook_title}_{sheet.title}_{current_date}.xlsx"
-
-            # Download the sheet as Excel file
-            response = client.session.get(export_url)
-            if response.status_code == 200:
-                with open(local_filename, 'wb') as f:
-                    f.write(response.content)
-                print(f"Sheet '{sheet.title}' from workbook '{workbook.title}' downloaded successfully as Excel!")
-            else:
-                print(f"Error downloading sheet '{sheet.title}' from workbook '{workbook.title}': {response.status_code}")
+        # Download the sheet as Excel file
+        response = requests.get(export_url)
+        if response.status_code == 200:
+            with open(local_filename, 'wb') as f:
+                f.write(response.content)
+            print(f"Sheet downloaded successfully as Excel: {sheet_url}")
+        else:
+            print(f"Error downloading sheet: {sheet_url}, Status code: {response.status_code}")
 
 # Example usage:
 sheet_urls = [
@@ -34,4 +26,4 @@ sheet_urls = [
     # Add more sheet URLs as needed
 ]
 folder_path = '/path/to/save/backup'
-download_all_sheets_from_workbooks(sheet_urls, folder_path)
+download_sheets_as_excel(sheet_urls, folder_path)
