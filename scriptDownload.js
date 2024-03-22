@@ -1,9 +1,13 @@
 import requests
 from datetime import datetime
 import os
+from urllib.parse import urlparse, parse_qs
 
 def download_sheets_as_excel(sheet_urls, folder_path):
     for index, sheet_url in enumerate(sheet_urls, start=1):
+        # Extract Google Sheet ID from URL
+        sheet_id = parse_qs(urlparse(sheet_url).query)['id'][0]
+
         # Generate filename with current date and sheet title
         current_date = datetime.now().strftime('%Y-%m-%d')
         sheet_title = sheet_url.split('/')[-2]  # Extract sheet title from URL
@@ -11,7 +15,7 @@ def download_sheets_as_excel(sheet_urls, folder_path):
         local_filename = os.path.join(folder_path, filename)
 
         # Construct the export URL for Excel format
-        export_url = sheet_url.replace('/edit#gid=', '/export?format=xlsx&gid=')
+        export_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=xlsx"
 
         # Download the sheet as Excel file
         response = requests.get(export_url)
