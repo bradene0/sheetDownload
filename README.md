@@ -10,3 +10,8 @@ google sheet download
 6.) interval weeks
 7.)time for download
 8.) save
+
+
+**Pip**
+pip install datetime
+pip install requests
