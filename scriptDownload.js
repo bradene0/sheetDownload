@@ -3,9 +3,10 @@ from datetime import datetime
 
 def download_sheets_as_excel(sheet_urls, folder_path):
     for sheet_url in sheet_urls:
-        # Generate filename with current date
+        # Generate filename with current date and sheet title
         current_date = datetime.now().strftime('%Y-%m-%d')
-        local_filename = f"{folder_path}/sheet_{current_date}.xlsx"
+        sheet_title = sheet_url.split('/')[-2]  # Extract sheet title from URL
+        local_filename = f"{folder_path}/{sheet_title}_{current_date}.xlsx"
 
         # Construct the export URL for Excel format
         export_url = sheet_url.replace('/edit#gid=', '/export?format=xlsx&gid=')
