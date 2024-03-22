@@ -13,5 +13,5 @@ google sheet download
 
 
 **Pip**
-pip install datetime \n
+pip install datetime ---+--- 
 pip install requests
