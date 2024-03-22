@@ -6,7 +6,13 @@ from urllib.parse import urlparse, parse_qs
 def download_sheets_as_excel(sheet_urls, folder_path):
     for index, sheet_url in enumerate(sheet_urls, start=1):
         # Extract Google Sheet ID from URL
-        sheet_id = parse_qs(urlparse(sheet_url).query)['id'][0]
+        parsed_url = urlparse(sheet_url)
+        query_params = parse_qs(parsed_url.query)
+        sheet_id = query_params.get('id', [''])[0]
+
+        if not sheet_id:
+            print(f"Error: Google Sheet ID not found in URL: {sheet_url}")
+            continue
 
         # Generate filename with current date and sheet title
         current_date = datetime.now().strftime('%Y-%m-%d')
