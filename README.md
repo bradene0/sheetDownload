@@ -1,6 +1,6 @@
 # sheetDownload
 google sheet download
-
+ to be used on windows
 **Trigger**
 1.) edit-current projects triggers
 2.)Add trigger
