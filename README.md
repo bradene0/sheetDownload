@@ -1,17 +1,16 @@
-# sheetDownload
-google sheet download
- to be used on windows
-**Trigger**
-1.) edit-current projects triggers
-2.)Add trigger
-3.) select function
-4.)Set to time driven
-5.)day timer
-6.) interval weeks
-7.)time for download
-8.) save
+## **To be used on Windows with Python. Make sure PATH was specified and added on installation.**
+**Python Program**
 
-
-**Pip**
-pip install datetime ---+--- 
-pip install requests
+ 1. Clone into personal machine or copy paste to IDE
+ 2. Add scheduler (if necessary)
+ 3. Run program
+## 
+**Sheets AppScript with API**
+ 1. Edit-current projects triggers 
+ 2. Add trigger 
+ 3. Select function 
+ 4. Set to time driven 
+ 5. Day timer i
+ 6. Interval weeks 
+ 7. Time for download 
+ 8. Save
