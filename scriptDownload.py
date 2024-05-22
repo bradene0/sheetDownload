@@ -4,7 +4,7 @@ from datetime import datetime
 import zipfile
 import io
 import os
-
+#todo add better ui and create scheduling gui
 def download_and_zip_sheets(sheet_urls, export_path):
     files_to_zip = []
     current_date = datetime.now().strftime('%Y-%m-%d')
